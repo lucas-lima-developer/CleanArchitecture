@@ -6,4 +6,24 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Shared\Behavior\" />
+    <Folder Include="Shared\Exceptions\" />
+    <Folder Include="Services\" />
+    <Folder Include="UseCases\DeleteUser\" />
+    <Folder Include="UseCases\GetAllUser\" />
+    <Folder Include="UseCases\UpdateUser\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
+    <PackageReference Include="MediatR" Version="12.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CleanArchitecture.Persistence\CleanArchitecture.Persistence.csproj" />
+    <ProjectReference Include="..\Domain\CleanArchitecture.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
