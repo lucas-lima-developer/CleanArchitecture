@@ -1,3 +1,4 @@
+using CleanArchitecture.API.Extensions;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Persistence;
 using CleanArchitecture.Persistence.Context;
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigurePersistenceApp(builder.Configuration);
 builder.Services.ConfigureApplication();
+builder.Services.ConfigureCorsPolicy();
 
 builder.Services.AddControllers();
 
