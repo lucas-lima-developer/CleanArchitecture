@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.UseCases.CreateUser;
+using CleanArchitecture.Application.UseCases.DeleteUser;
 using CleanArchitecture.Application.UseCases.GetAllUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,18 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<CreateUserResponse>> Create(CreateUserRequest request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<DeleteUserResponse>> Delete(Guid? id, CancellationToken cancellationToken)
+    {
+        if (id == null) return BadRequest("Id é nulo");
+
+        var request = new DeleteUserRequest(id.Value);
+
+        var response = await _mediator.Send(request, cancellationToken);
+
         return Ok(response);
     }
 }
