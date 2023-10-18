@@ -1,4 +1,6 @@
-﻿using CleanArchitecture.Application.UseCases.GetAllUser;
+﻿using AutoMapper;
+using CleanArchitecture.Application.UseCases.GetAllUser;
+using CleanArchitecture.Domain.Interfaces;
 using CleanArchitecture.Test.Helpers;
 using FluentAssertions;
 
@@ -6,14 +8,20 @@ namespace CleanArchitecture.Test.UseCases.GetAllUser
 {
     public class GetAllUserUnitTests
     {
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
+
+        public GetAllUserUnitTests()
+        {
+            _userRepository = Factory.GetUserRepository();
+            _mapper = Factory.GetMapper(new GetAllUserMapper());
+        }
+
         [Fact]
         public async Task GetAllUserHandler_WithNoUserInDatabase_ShouldReturnEmptyArray()
         {
             // Arrange
-            var dbContext = await Factory.GetUserRepository();
-            var mapper = Factory.GetMapper(new GetAllUserMapper());
-
-            var handler = new GetAllUserHandler(dbContext, mapper);
+            var handler = new GetAllUserHandler(_userRepository, _mapper);
 
             var request = new GetAllUserRequest { };
 
@@ -31,11 +39,9 @@ namespace CleanArchitecture.Test.UseCases.GetAllUser
         public async Task GetAllUserHandler_WithNoUser_ShouldReturnArrayWithUser()
         {
             // Arrange
-            var userRepository = await Factory.GetUserRepository();
-            var mapper = Factory.GetMapper(new GetAllUserMapper());
             var userCreated = await UserHelper.CreateUser();
 
-            var handler = new GetAllUserHandler(userRepository, mapper);
+            var handler = new GetAllUserHandler(_userRepository, _mapper);
 
             var request = new GetAllUserRequest { };
 
