@@ -1,10 +1,6 @@
-﻿using AutoMapper;
-using CleanArchitecture.Application.UseCases.GetAllUser;
-using CleanArchitecture.Domain.Entities;
-using CleanArchitecture.Persistence.Context;
-using CleanArchitecture.Persistence.Repositories;
+﻿using CleanArchitecture.Application.UseCases.GetAllUser;
+using CleanArchitecture.Test.Helpers;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Test.UseCases.GetAllUser
 {
@@ -14,8 +10,8 @@ namespace CleanArchitecture.Test.UseCases.GetAllUser
         public async Task GetAllUserHandler_WithNoUserInDatabase_ShouldReturnEmptyArray()
         {
             // Arrange
-            var dbContext = await Helpers.Helpers.GetUserRepository();
-            var mapper = Helpers.Helpers.GetMapper();
+            var dbContext = await Factory.GetUserRepository();
+            var mapper = Factory.GetMapper(new GetAllUserMapper());
 
             var handler = new GetAllUserHandler(dbContext, mapper);
 
@@ -35,22 +31,9 @@ namespace CleanArchitecture.Test.UseCases.GetAllUser
         public async Task GetAllUserHandler_WithNoUser_ShouldReturnArrayWithUser()
         {
             // Arrange
-            var dbContext = Helpers.Helpers.GetDatabaseContext();
-            var userRepository = await Helpers.Helpers.GetUserRepository();
-            var mapper = Helpers.Helpers.GetMapper();
-
-            var userCreated = new User
-            {
-                Id = Guid.NewGuid(),
-                Name = "Lucas",
-                Email = "lucas@email.com",
-                DateCreated = DateTime.Now,
-                DateUpdate = DateTime.Now,
-                DateDeleted = DateTime.Now,
-            };
-
-            dbContext.Users.Add(userCreated);
-            await dbContext.SaveChangesAsync();
+            var userRepository = await Factory.GetUserRepository();
+            var mapper = Factory.GetMapper(new GetAllUserMapper());
+            var userCreated = await UserHelper.CreateUser();
 
             var handler = new GetAllUserHandler(userRepository, mapper);
 
