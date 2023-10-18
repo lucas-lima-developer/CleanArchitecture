@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using CleanArchitecture.Application.UseCases.GetAllUser;
 using CleanArchitecture.Persistence.Context;
 using CleanArchitecture.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Test.Helpers
 {
-    public class Helpers
+    public class Factory
     {
         public static AppDbContext GetDatabaseContext()
         {
@@ -21,20 +20,15 @@ namespace CleanArchitecture.Test.Helpers
         }
         public static Task<UserRepository> GetUserRepository()
         {
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "CleanArchitectureTest")
-                .Options;
-
-            var databaseContext = new AppDbContext(options);
+            var databaseContext = GetDatabaseContext();
             databaseContext.Database.EnsureCreated();
 
             return Task.FromResult(new UserRepository(databaseContext));
         }
 
-        public static IMapper GetMapper()
+        public static IMapper GetMapper(Profile profile)
         {
-            var myProfile = new GetAllUserMapper();
-            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
+            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile));
             IMapper mapper = new Mapper(configuration);
 
             return mapper;
