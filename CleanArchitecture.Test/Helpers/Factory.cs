@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CleanArchitecture.Domain.Interfaces;
 using CleanArchitecture.Persistence.Context;
 using CleanArchitecture.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +19,21 @@ namespace CleanArchitecture.Test.Helpers
 
             return databaseContext;
         }
-        public static Task<UserRepository> GetUserRepository()
+
+        public static IUnitOfWork GetUnitOfWork()
         {
             var databaseContext = GetDatabaseContext();
             databaseContext.Database.EnsureCreated();
 
-            return Task.FromResult(new UserRepository(databaseContext));
+            return new UnitOfWork(databaseContext);
+        }
+
+        public static IUserRepository GetUserRepository()
+        {
+            var databaseContext = GetDatabaseContext();
+            databaseContext.Database.EnsureCreated();
+
+            return new UserRepository(databaseContext);
         }
 
         public static IMapper GetMapper(Profile profile)
