@@ -25,7 +25,6 @@ namespace CleanArchitecture.Test.UseCases.CreateUser
         public async Task CreateUserHandler_WithCorrectData_ShouldReturnCreatedUserResponse()
         {
             // Arrange
-            var context = Factory.GetDatabaseContext();
             var handler = new CreateUserHandler(_unitOfWork, _userRepository, _mapper);
 
             var request = new CreateUserRequest("newuser@email.com", "newuser");
